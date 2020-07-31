@@ -1,0 +1,38 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraMove : MonoBehaviour
+{
+
+    public float sensitivity;
+    public float dist;
+    public float height;
+    public Transform target;
+    public Transform cam_tr;
+    private Vector3 offset;
+
+    void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        cam_tr = GetComponent<Transform>();
+        // offset = new Vector3(target.position.x + dist, target.position.y + height, target.position.z + dist);
+        offset = new Vector3(dist, height, 0);
+    }
+
+    void Update()
+    {
+        float dx = Input.GetAxis("Mouse X");
+        float dy = Input.GetAxis("Mouse Y");
+
+        offset = Quaternion.AngleAxis(dx * sensitivity, Vector3.up) * offset;
+        offset = Quaternion.AngleAxis(dy * sensitivity, cam_tr.right) * offset;
+        cam_tr.position = target.position + offset;
+        cam_tr.LookAt(target);
+    }
+
+    void LateUpdate(){
+
+    }
+}
